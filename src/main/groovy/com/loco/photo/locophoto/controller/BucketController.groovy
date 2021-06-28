@@ -1,8 +1,8 @@
 package com.loco.photo.locophoto.controller
 
 
-import com.loco.photo.locophoto.externalTools.AmazonClient
-import com.loco.photo.locophoto.externalTools.GoogleMaps
+import com.loco.photo.locophoto.tools.AmazonClient
+import com.loco.photo.locophoto.tools.GoogleMaps
 import com.loco.photo.locophoto.repository.ImageRepository
 import com.loco.photo.locophoto.bean.Image
 import org.springframework.beans.factory.annotation.Autowired

@@ -1,6 +1,6 @@
 package com.loco.photo.locophoto.controller
 
-import com.loco.photo.locophoto.externalTools.GoogleMaps
+import com.loco.photo.locophoto.tools.GoogleMaps
 import com.loco.photo.locophoto.repository.ImageRepository
 import com.loco.photo.locophoto.repository.UserRepository
 import com.loco.photo.locophoto.bean.Image
