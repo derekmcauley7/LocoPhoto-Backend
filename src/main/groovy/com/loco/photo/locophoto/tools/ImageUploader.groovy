@@ -1,4 +1,4 @@
-package com.loco.photo.locophoto.controller;
+package com.loco.photo.locophoto.tools;
 
 interface ImageUploader {
 
