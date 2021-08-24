@@ -37,5 +37,18 @@ public class GoogleMapsTest {
         //then
         assertEquals("London", cityName);
     }
+    
+    @Test
+    public void shouldCleanCityName(){
+        //given
+        String city = "Dublin 20";
+        
+        //when 
+        String cityName = GoogleMaps.cleanName(city);
+        
+        //then
+        assertEquals("Dublin", cityName);
+        
+    }
 
 }

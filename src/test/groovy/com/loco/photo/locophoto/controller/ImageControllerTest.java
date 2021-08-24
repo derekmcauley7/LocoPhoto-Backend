@@ -39,5 +39,33 @@ public class ImageControllerTest {
         Image[] images = imageController.index().toArray(new Image[10]);
         assertTrue(images.length > 0);
     }
+
+    @Test
+    public void getAllUserImagesByEmail() throws Exception {
+
+        String uri = "/userImages/derekmcauley7@gmail.com";
+        MockMvc mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri)
+                .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+
+        int status = mvcResult.getResponse().getStatus();
+        assertEquals(200, status);
+        Image[] images = imageController.index().toArray(new Image[10]);
+        assertTrue(images.length > 0);
+    }
+
+    @Test
+    public void getImagesForLocation() throws Exception {
+
+        String uri = "/allImages/-6.353800280291502/53.3495283197085";
+        MockMvc mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri)
+                .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+
+        int status = mvcResult.getResponse().getStatus();
+        assertEquals(200, status);
+        Image[] images = imageController.index().toArray(new Image[10]);
+        assertTrue(images.length > 0);
+    }
     
 }

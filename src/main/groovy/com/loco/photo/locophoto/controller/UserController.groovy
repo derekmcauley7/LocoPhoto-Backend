@@ -31,16 +31,16 @@ class UserController {
     @PostMapping(value="/user")
     User createUser(@RequestBody Map<String, String> body) {
         String name = body.get("name")
-        String imageUrl = body.get("imageUrl")
-        if(imageUrl == "" || imageUrl.isEmpty()) {
+        Optional<String> imageUrl = body.get("imageUrl")
+        
+        if (!imageUrl.isPresent()) {
            imageUrl = "https://accessibility-checker.s3-eu-west-1.amazonaws.com/default.jpg"
         }
         String email = body.get("email")
-        User user = userRepository.findDistinctEmail(email)
-        if(user != null) {
-            return user
-        }
-        return userRepository.save(new User(email, name, imageUrl, false , ""))
+        
+        Optional<User> user1 = userRepository.findDistinctEmail(email)
+        
+        return user1.orElse(userRepository.save(new User(email, name, imageUrl, false , "")))
     }
 
 

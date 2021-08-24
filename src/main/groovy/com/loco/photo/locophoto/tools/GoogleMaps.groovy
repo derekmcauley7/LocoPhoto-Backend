@@ -65,15 +65,25 @@ class GoogleMaps {
             JSONArray types = address.getJSONArray("types")
             String type = types.getString(0)
             if (!TextUtils.isEmpty(longName)) {
+                if (type.equalsIgnoreCase("administrative_area_level_1") && city == "") {
+                    city = longName
+                }
                 if (type.equalsIgnoreCase("locality")) {
                     city = longName
                 }
-                if (type.equalsIgnoreCase("postal_town") && city == "") {
+                if (type.equalsIgnoreCase("postal_town")) {
+                    city = longName
+                }
+                if (type.equalsIgnoreCase("country") && city == "") {
                     city = longName
                 }
             }
         }
-        city
+        cleanName(city);
+    }
+    
+    static String cleanName(String s){
+        return s.replaceAll("[0-9]","").trim()
     }
 }
 

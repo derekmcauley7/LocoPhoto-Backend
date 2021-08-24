@@ -5,12 +5,15 @@ import com.loco.photo.locophoto.repository.ImageRepository
 import com.loco.photo.locophoto.repository.UserRepository
 import com.loco.photo.locophoto.bean.Image
 import com.loco.photo.locophoto.bean.User
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
+
+import ch.qos.logback.classic.Logger
 
 @RestController
 class ImageController {
@@ -21,26 +24,26 @@ class ImageController {
     @Autowired
     UserRepository userRepository
 
+    Logger logger = LoggerFactory.getLogger(ImageController.class)
+
     @GetMapping("/images")
-    List<Image> index(){
+    List<Image> index() {
+        logger.info("Getting All Images")
         return imageRepository.findAll()
     }
 
-        @GetMapping("/allImages/{lat}/{lng}")
-    List<Image> search(@PathVariable String lat, @PathVariable String lng){
-        String city =  GoogleMaps.getCity(lat, lng)
+    @GetMapping("/allImages/{lat}/{lng}")
+    List<Image> search(@PathVariable("lat") String lat, @PathVariable("lng") String lng) {
+        String city = GoogleMaps.getCity(lat, lng)
+        logger.info("Getting images for city " + city + ". Using lat : " + lat + " Long: " + lng)
         return imageRepository.findByCityContaining(city)
     }
 
     @GetMapping("/userImages/{email}")
-    List<Image> searchByUser(@PathVariable String email){
-        User user = userRepository.findDistinctEmail(email)
-        String id
-        if(user == null) {
-            id = "0"
-        } else {
-            id = user.id
-        }
+    List<Image> searchByUser(@PathVariable("email") String email) {
+        Optional<User> user = userRepository.findDistinctEmail(email)
+        String id = "0";
+        user.ifPresent({ u -> id = u.id })
         return imageRepository.findByUserID(id)
     }
 
@@ -50,12 +53,13 @@ class ImageController {
         Double lat = body.get("lat")
         Double lng = body.get("lng")
         GoogleMaps.getCity(body.get("lat"), body.get("lng"))
-        String city =  GoogleMaps.getCity(lat, lng)
+        String city = GoogleMaps.getCity(lat, lng)
         String userId = body.get("userId")
         String comment = body.get("comment")
         String date = body.get("date")
         String url = body.get("url")
-        return imageRepository.save(new Image(lat,lng, city, userId, date, url, comment))
+        logger.info("Creating new Image for " + city + " on "  + date)
+        return imageRepository.save(new Image(lat, lng, city, userId, date, url, comment))
     }
 
     @PostMapping("/image/views/{id}")

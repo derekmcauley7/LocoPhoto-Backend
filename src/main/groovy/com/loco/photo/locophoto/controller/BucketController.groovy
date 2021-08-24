@@ -29,20 +29,20 @@ class BucketController {
     private ImageUploader imageUploader
 
     @Autowired
-    BucketController(   AmazonClient imageUploader) {
+    BucketController(AmazonClient imageUploader) {
         this.imageUploader = imageUploader
     }
 
     @PostMapping("/uploadFile")
-    String uploadFile(@RequestPart(value = "file") MultipartFile file, @RequestParam String lat,  @RequestParam String lng, @RequestParam String userID, @RequestParam String comment) {
-        String url = this.imageUploader.uploadImage(file)
+    String uploadFile(@RequestPart(value = "file") MultipartFile file, @RequestParam String lat, @RequestParam String lng, @RequestParam String userID, @RequestParam String comment) {
+        Optional<String> url = this.imageUploader.uploadImage(file)
         Double latitude = Double.parseDouble(lat)
         Double longitude = Double.parseDouble(lng)
-        String city =  GoogleMaps.getCity(lat, lng)
+        String city = GoogleMaps.getCity(lat, lng)
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
         LocalDate localDate = LocalDate.now()
-        Image image =  imageRepository.save(new Image(latitude, longitude, city, userID, dateTimeFormatter.format(localDate).toString(), url, comment))
-        if (url != null && image != null) {
+        Optional<Image> image = imageRepository.save(new Image(latitude, longitude, city, userID, dateTimeFormatter.format(localDate).toString(), url, comment))
+        if (url.isPresent() && image.isPresent()) {
             return "Image Uploaded!!!"
         } else {
             return "Sorry something went wrong"

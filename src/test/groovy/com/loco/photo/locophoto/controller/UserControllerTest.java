@@ -1,5 +1,6 @@
 package com.loco.photo.locophoto.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loco.photo.locophoto.bean.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -57,6 +58,26 @@ public class UserControllerTest {
         given(userController.createUser(body)).willReturn(returnedUser);
 
         assert userController.createUser(body) == returnedUser;
+    }
+
+    @Test
+    public void getUserWithoutImage() throws Exception {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String uri = "/user";
+
+        Map<String,Object> body = new HashMap<>();
+        body.put("name","newUser");
+        body.put("email","derek.mcauley@gmail.com");
+        
+        MockMvc mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.post(uri)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(body))
+                .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+
+        int status = mvcResult.getResponse().getStatus();
+        assertEquals(200, status);
     }
     
 }
