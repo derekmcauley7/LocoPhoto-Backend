@@ -56,7 +56,7 @@ class GoogleMaps {
     }
 
     static String getCityFromResponse(JSONObject jsonObj) {
-        String city = ""
+        String cityName = ""
         JSONArray addressComponents = jsonObj.getJSONArray("results").getJSONObject(0).getJSONArray("address_components");
 
         for (int i = 0; i < addressComponents.length(); i++) {
@@ -65,23 +65,28 @@ class GoogleMaps {
             JSONArray types = address.getJSONArray("types")
             String type = types.getString(0)
             if (!TextUtils.isEmpty(longName)) {
-                if (type.equalsIgnoreCase("administrative_area_level_1") && city == "") {
-                    city = longName
+                if (type.equalsIgnoreCase("administrative_area_level_1") && cityName.isEmpty()) {
+                    cityName = setCityName(longName, cityName)
                 }
                 if (type.equalsIgnoreCase("locality")) {
-                    city = longName
+                    cityName = setCityName(longName, cityName)
                 }
                 if (type.equalsIgnoreCase("postal_town")) {
-                    city = longName
+                    cityName = setCityName(longName, cityName)
                 }
-                if (type.equalsIgnoreCase("country") && city == "") {
-                    city = longName
+                if (type.equalsIgnoreCase("country") && cityName.isEmpty()) {
+                    cityName = setCityName(longName, cityName)
                 }
             }
         }
-        cleanName(city);
+        cityName
     }
-    
+
+    private static String setCityName(String longName, String city) {
+        city = longName
+        cleanName(city)
+    }
+
     static String cleanName(String s){
         return s.replaceAll("[0-9]","").trim()
     }
