@@ -88,6 +88,11 @@ class Image {
     void setViews(Integer views) {
         this.views = views
     }
+    
+    void increaseViews() {
+        int newViewsTotal = this.views == null ? 0 : this.getViews().intValue() + 1
+        setViews(newViewsTotal)
+    }
 
     Integer getLikes() {
         return likes
@@ -95,6 +100,16 @@ class Image {
 
     void setLikes(Integer likes) {
         this.likes = likes
+    }
+    
+    void increaseLikes() {
+        int numberOfLikesPlusOne = this.likes  == null ? 0 : likes + 1
+        this.likes = numberOfLikesPlusOne
+    }
+
+    void decreaseLikes() {
+        int numberOfLikeMinusOne = images.get().getLikes() == null ? 0 : images.get().getLikes().intValue() - 1
+        this.likes = numberOfLikeMinusOne
     }
 
     String getUrl() {

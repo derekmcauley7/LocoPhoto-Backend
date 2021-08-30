@@ -64,10 +64,9 @@ class ImageController {
 
     @PostMapping("/image/views/{id}")
     Image updateViews(@PathVariable String id) {
-        Long num = Long.parseLong(id)
-        Optional<Image> images = imageRepository.findById(num)
-        int views = images.get().getViews() == null ? 0 : images.get().getViews().intValue() + 1
-        images.get().setViews(views)
+        Long imageId = Long.parseLong(id)
+        Optional<Image> images = imageRepository.findById(imageId)
+        images.get().increaseViews()
         imageRepository.save(images.get())
     }
 
@@ -75,8 +74,7 @@ class ImageController {
     Image updateLikes(@PathVariable String id) {
         Long num = Long.parseLong(id)
         Optional<Image> images = imageRepository.findById(num)
-        int likes = images.get().getLikes() == null ? 0 : images.get().getLikes().intValue() + 1
-        images.get().setLikes(likes)
+        images.get().increaseLikes()
         imageRepository.save(images.get())
     }
 
@@ -84,8 +82,7 @@ class ImageController {
     Image updateUnLikes(@PathVariable String id) {
         Long num = Long.parseLong(id)
         Optional<Image> images = imageRepository.findById(num)
-        int likes = images.get().getLikes() == null ? 0 : images.get().getLikes().intValue() - 1
-        images.get().setLikes(likes)
+        images.get().decreaseLikes()
         imageRepository.save(images.get())
     }
 
